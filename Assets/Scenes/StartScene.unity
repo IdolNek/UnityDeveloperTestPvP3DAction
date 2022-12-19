@@ -319,8 +319,9 @@ MonoBehaviour:
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 9143825353232122431, guid: a58deb1aab9cc974ab944c8bf92b757c, type: 3}
   autoCreatePlayer: 1
-  playerSpawnMethod: 0
-  spawnPrefabs: []
+  playerSpawnMethod: 1
+  spawnPrefabs:
+  - {fileID: 7798141869800021845, guid: 5d5691c8e7d2b9c44b15319c48333d74, type: 3}
   timeInterpolationGui: 0
   showRoomGUI: 1
   minPlayers: 2
@@ -330,6 +331,7 @@ MonoBehaviour:
   _allPlayersReady: 0
   roomSlots: []
   clientIndex: 0
+  _roundSystem: {fileID: 7798141869800021845, guid: 5d5691c8e7d2b9c44b15319c48333d74, type: 3}
 --- !u!1 &1449975892
 GameObject:
   m_ObjectHideFlags: 0

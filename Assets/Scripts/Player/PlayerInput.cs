@@ -7,11 +7,14 @@ public class PlayerInput : NetworkBehaviour
 {
     [SerializeField] private PlayerAction _playerAction;
     [SerializeField] private Camera _camera;
+    [SerializeField] private AudioListener _audioListener;
     private Vector3 _moveDirection;
     public override void OnStartLocalPlayer()
     {
         _playerAction.enabled = true;
         _camera.enabled = true;
+        _audioListener.enabled = true;
+
     }
     private void Update()
     {

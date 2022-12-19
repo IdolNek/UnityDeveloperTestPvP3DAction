@@ -2,16 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using System;
+using UnityEngine.SceneManagement;
+
 [AddComponentMenu("")]
 public class NetworkLobbyManager : NetworkRoomManager
 {
+    [SerializeField] private GameObject _roundSystem;
+    public static event Action OnServerStopped;
+    public static event Action<NetworkConnection> OnServerReadied;
     /// <summary>
     /// This is called on the server when a networked scene finishes loading.
     /// </summary>
     /// <param name="sceneName">Name of the new scene.</param>
     public override void OnRoomServerSceneChanged(string sceneName)
     {
-        // spawn the initial batch of Rewards
+        if (sceneName == GameplayScene)
+        {
+            Debug.Log("Спаун прошел?");
+            GameObject roundSystemInstance = Instantiate(_roundSystem);
+            NetworkServer.Spawn(roundSystemInstance);
+        }
 
     }
 
@@ -38,6 +49,7 @@ public class NetworkLobbyManager : NetworkRoomManager
     public override void OnRoomStopServer()
     {
         base.OnRoomStopServer();
+        OnServerStopped?.Invoke();
     }
 
     /*
@@ -72,5 +84,11 @@ public class NetworkLobbyManager : NetworkRoomManager
 
             ServerChangeScene(GameplayScene);
         }
+    }
+    public override void OnServerReady(NetworkConnectionToClient conn)
+    {
+
+        base.OnServerReady(conn);
+        OnServerReadied?.Invoke(conn);
     }
 }

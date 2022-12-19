@@ -20,6 +20,7 @@ public class FollowCamera : MonoBehaviour
     }
     private void Update()
     {
+        if (_target == null) return;
         float mouseX = Input.GetAxis("Mouse X") * _mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * _mouseSensitivity;
         _rotationY += mouseX;

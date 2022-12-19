@@ -312,7 +312,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6996643759483575005}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!114 &2453907526632317417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -517,6 +517,7 @@ MonoBehaviour:
   syncInterval: 0.1
   _playerAction: {fileID: 7507717098841485136}
   _camera: {fileID: 6038671144893726207}
+  _audioListener: {fileID: 8247234134841430542}
 --- !u!114 &-1462901913808810434
 MonoBehaviour:
   m_ObjectHideFlags: 0
