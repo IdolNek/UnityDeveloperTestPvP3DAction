@@ -6,6 +6,7 @@ public class PlayerAction : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _rotationSpeed;
+    [SerializeField] private AttackState _attackState;
     private Rigidbody _rigidbody;
     private void Start()
     {
@@ -13,6 +14,7 @@ public class PlayerAction : MonoBehaviour
     }
     public void MovePlayer(Vector3 moveDirection)
     {
+        if (_attackState.IsAttack) return;
         if (moveDirection != Vector3.zero)
         {
             Quaternion desireRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
@@ -20,5 +22,9 @@ public class PlayerAction : MonoBehaviour
         }
         Vector3 moveVector = moveDirection * _moveSpeed * Time.fixedDeltaTime;
         _rigidbody.velocity = new Vector3(moveVector.x, _rigidbody.velocity.y, moveVector.z);
+    }
+    public void Attack()
+    {
+        _attackState.StartAttack();
     }
 }

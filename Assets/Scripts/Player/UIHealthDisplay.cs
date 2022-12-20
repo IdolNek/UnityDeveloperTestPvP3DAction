@@ -20,6 +20,7 @@ public class UIHealthDisplay : MonoBehaviour
     }
     private void OnHealthChanged(float currentHealth, float maxHealth)
     {
+        Debug.Log("мен€ю жизни в баре");
         _healthBarImage.fillAmount = currentHealth/maxHealth;
     }
 }

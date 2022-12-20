@@ -19,7 +19,6 @@ public class NetworkLobbyManager : NetworkRoomManager
     {
         if (sceneName == GameplayScene)
         {
-            Debug.Log("Спаун прошел?");
             GameObject roundSystemInstance = Instantiate(_roundSystem);
             NetworkServer.Spawn(roundSystemInstance);
         }
@@ -34,12 +33,12 @@ public class NetworkLobbyManager : NetworkRoomManager
     /// <param name="roomPlayer"></param>
     /// <param name="gamePlayer"></param>
     /// <returns>true unless some code in here decides it needs to abort the replacement</returns>
-    public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
-    {
-        PlayerScore playerScore = gamePlayer.GetComponent<PlayerScore>();
-        playerScore.index = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
-        return true;
-    }
+    //public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
+    //{
+    //    PlayerScore playerScore = gamePlayer.GetComponent<PlayerScore>();
+    //    playerScore.index = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
+    //    return true;
+    //}
 
     public override void OnRoomStopClient()
     {

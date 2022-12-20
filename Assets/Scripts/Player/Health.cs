@@ -4,26 +4,39 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Health : NetworkBehaviour
 {
     [SerializeField] private float _maxHealth;
-    [SyncVar] private float _currentHeath;
+    [SerializeField] private float _currentHeath;
     public delegate void HealthChanged(float currentHeath, float maxHealth);
-    public event Action<float,float> EventHealthChanged;
-    [Server]
-    private void SetHealth(float value)
+    public HealthChanged EventHealthChanged;
+    [SyncVar(hook = nameof(SyncHealth))]
+    private float _syncHealth;
+    private void SyncHealth(float oldValue, float newValue)
     {
-        _currentHeath = value;
+        _currentHeath = newValue;
         EventHealthChanged?.Invoke(_currentHeath, _maxHealth);
+    }
+    [Server]
+    private void SetHealth(float newValue)
+    {
+        _syncHealth = newValue;
+    }
+    [Command]
+    public void CmdDealDamage(float newValue)
+    {
+        SetHealth(Math.Max(_currentHeath - newValue, 0));
+        Debug.Log("Атака");
+    }
+    [Server]
+    public void DealDamagege(float newValue)
+    {
+        SetHealth(Math.Max(_currentHeath - newValue, 0));
     }
     public override void OnStartServer()
     {
         SetHealth(_maxHealth);
-    }
-    [Command]
-    public void CmdDealDamage(float damage)
-    {
-        SetHealth(Mathf.Max(_currentHeath - damage,0));
     }
 }
