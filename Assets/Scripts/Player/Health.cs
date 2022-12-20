@@ -28,12 +28,13 @@ public class Health : NetworkBehaviour
     public void CmdDealDamage(float newValue)
     {
         SetHealth(Math.Max(_currentHeath - newValue, 0));
-        Debug.Log("Атака");
+        Debug.Log("Атака команды клинета");
     }
     [Server]
     public void DealDamagege(float newValue)
     {
         SetHealth(Math.Max(_currentHeath - newValue, 0));
+        Debug.Log("Атака команды Сервера");
     }
     public override void OnStartServer()
     {

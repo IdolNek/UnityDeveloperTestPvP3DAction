@@ -687,7 +687,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83392ae5c1b731446909f252fd494ae4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
+  syncDirection: 1
   syncMode: 0
   syncInterval: 0.1
   target: {fileID: 8115253506447888368}
@@ -789,7 +789,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncDirection: 0
-  syncMode: 0
+  syncMode: 1
   syncInterval: 0.1
   _maxHealth: 100
   _currentHeath: 0
@@ -805,9 +805,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca989631ce9ed6d4aa7fc23fb1a37d24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0.1
+  syncDirection: 1
+  syncMode: 1
+  syncInterval: 0
   _attackForce: 500
   _attackDistance: 5
   _attackDamage: 35
