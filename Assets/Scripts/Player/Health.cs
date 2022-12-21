@@ -9,35 +9,35 @@ using UnityEngine.Events;
 public class Health : NetworkBehaviour
 {
     [SerializeField] private float _maxHealth;
-    [SerializeField] private float _currentHeath;
+    [SyncVar] [SerializeField] private float _currentHeath;
     public delegate void HealthChanged(float currentHeath, float maxHealth);
-    public HealthChanged EventHealthChanged;
-    [SyncVar(hook = nameof(SyncHealth))]
-    private float _syncHealth;
-    public void SyncHealth(float oldValue, float newValue)
-    {
-        _currentHeath = newValue;
-        EventHealthChanged?.Invoke(_currentHeath, _maxHealth);
-    }
+    public event HealthChanged EventHealthChanged;
+    //[SyncVar(hook = nameof(SyncHealth))]
+    //private float _syncHealth;
+    //public void SyncHealth(float oldValue, float newValue)
+    //{
+    //    _currentHeath = newValue;
+
+    //}
     [Server]
     private void SetHealth(float newValue)
     {
-        _syncHealth = newValue;
-    }
-    [Command]
-    public void CmdDealDamage(float newValue)
-    {
-        SetHealth(Math.Max(_currentHeath - newValue, 0));
-        Debug.Log("Атака команды клинета");
+        _currentHeath = newValue;
+        OnHealtChanging();
     }
     [Server]
-    public void ApplyDamage(float newValue)
+    public void ApplyDamage(float damage)
     {
-        SetHealth(Math.Max(_currentHeath - newValue, 0));
+        SetHealth(Math.Max(_currentHeath - damage, 0));
         Debug.Log("Атака команды Сервера");
+    }
+    [ClientRpc]
+    private void OnHealtChanging()
+    {
+        EventHealthChanged?.Invoke(_currentHeath, _maxHealth);
     }
     public override void OnStartServer()
     {
-        SetHealth(_maxHealth);
+        _currentHeath = _maxHealth;
     }
 }

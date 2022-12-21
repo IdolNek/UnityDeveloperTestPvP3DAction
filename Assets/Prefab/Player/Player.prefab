@@ -788,7 +788,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc1ad132e3fcc7947ac254688881d2b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 1
+  syncDirection: 0
   syncMode: 1
   syncInterval: 0.1
   _maxHealth: 100

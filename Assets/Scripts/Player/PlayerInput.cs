@@ -20,7 +20,7 @@ public class PlayerInput : NetworkBehaviour
     {
         if (!isLocalPlayer) return;
         GetMoveDirection();
-        if (Input.GetMouseButtonDown(0)) _playerAction.Attack();
+        if (Input.GetMouseButtonUp(0)) _playerAction.Attack();
     }
     private void FixedUpdate()
     {
