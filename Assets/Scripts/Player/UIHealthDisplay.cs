@@ -10,13 +10,13 @@ public class UIHealthDisplay : MonoBehaviour
     [SerializeField] private Image _healthBarImage;
     private void OnEnable()
     {
-        _health.EventHealthChanged += OnHealthChanged;
+        _health.OnHealthChanged += OnHealthChanged;
     }
 
 
     private void OnDisable()
     {
-        _health.EventHealthChanged -= OnHealthChanged;
+        _health.OnHealthChanged -= OnHealthChanged;
     }
     private void OnHealthChanged(float currentHealth, float maxHealth)
     {

@@ -14,7 +14,6 @@ public class PlayerInput : NetworkBehaviour
         _playerAction.enabled = true;
         _camera.enabled = true;
         _audioListener.enabled = true;
-
     }
     private void Update()
     {
@@ -25,7 +24,7 @@ public class PlayerInput : NetworkBehaviour
     private void FixedUpdate()
     {
         if (!isLocalPlayer) return;
-        _playerAction.MovePlayer(_moveDirection);
+        if(_playerAction != null) _playerAction.MovePlayer(_moveDirection);
     }
     private void GetMoveDirection()
     {

@@ -10,9 +10,11 @@ public class Health : NetworkBehaviour
 {
     [SerializeField] private float _maxHealth;
     [SerializeField] private float _isDamaged—ountdownTime;
+    [SerializeField] private Animator _animatorController;
     [SyncVar] [SerializeField] private float _currentHeath;
     public delegate void HealthChanged(float currentHeath, float maxHealth);
-    public event HealthChanged EventHealthChanged;
+    public event UnityAction<float, float> OnHealthChanged;
+    public event UnityAction OnPlayerDayed;
     private bool isDamaged = false;
     //[SyncVar(hook = nameof(SyncHealth))]
     //private float _syncHealth;
@@ -29,7 +31,7 @@ public class Health : NetworkBehaviour
     private void SetHealth(float newValue)
     {
         _currentHeath = newValue;
-        OnHealtChanging();
+        HealthChanging();
     }
     [Server]
     public void ApplyDamage(float damage)
@@ -47,9 +49,16 @@ public class Health : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void OnHealtChanging()
+    private void HealthChanging()
     {
-        EventHealthChanged?.Invoke(_currentHeath, _maxHealth);
+        OnHealthChanged?.Invoke(_currentHeath, _maxHealth);
+        if (_currentHeath == 0)
+        {
+            OnPlayerDayed?.Invoke();
+            _animatorController.SetBool("Death", true);
+        }
+        else _animatorController.SetTrigger("GetHit");
+
     }
     //public override void OnStartServer()
     //{
