@@ -14,7 +14,7 @@ public class Health : NetworkBehaviour
     public HealthChanged EventHealthChanged;
     [SyncVar(hook = nameof(SyncHealth))]
     private float _syncHealth;
-    private void SyncHealth(float oldValue, float newValue)
+    public void SyncHealth(float oldValue, float newValue)
     {
         _currentHeath = newValue;
         EventHealthChanged?.Invoke(_currentHeath, _maxHealth);
@@ -31,7 +31,7 @@ public class Health : NetworkBehaviour
         Debug.Log("Атака команды клинета");
     }
     [Server]
-    public void DealDamagege(float newValue)
+    public void ApplyDamage(float newValue)
     {
         SetHealth(Math.Max(_currentHeath - newValue, 0));
         Debug.Log("Атака команды Сервера");

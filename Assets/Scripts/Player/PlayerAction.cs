@@ -14,7 +14,6 @@ public class PlayerAction : MonoBehaviour
     }
     public void MovePlayer(Vector3 moveDirection)
     {
-        if (_attackState.IsAttack) return;
         if (moveDirection != Vector3.zero)
         {
             Quaternion desireRotation = Quaternion.LookRotation(moveDirection, Vector3.up);

@@ -356,7 +356,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6118416890980179492}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.59, z: 0}
+  m_LocalPosition: {x: 0, y: 0.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -788,7 +788,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc1ad132e3fcc7947ac254688881d2b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
+  syncDirection: 1
   syncMode: 1
   syncInterval: 0.1
   _maxHealth: 100
@@ -805,11 +805,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca989631ce9ed6d4aa7fc23fb1a37d24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 1
+  syncDirection: 0
   syncMode: 1
   syncInterval: 0
-  _attackForce: 500
-  _attackDistance: 5
+  _attackForce: 700
+  _attackDistance: 7
   _attackDamage: 35
 --- !u!136 &330345629074199514
 CapsuleCollider:

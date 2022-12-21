@@ -14,11 +14,9 @@ public class AttackState : NetworkBehaviour
     private Rigidbody _rigidbody;
     private Vector3 _attackStartPoint;
     private float _raycastDistance = 0.5f;
-    [SyncVar]
     private bool _isAttack;
     //[SyncVar(hook = nameof(SyncIsAttacking))]
     //private bool _syncIsAttack;
-    public bool IsAttack => _isAttack;
     //private void SyncIsAttacking(bool oldValue, bool newValue)
     //{
     //    _isAttacking = newValue;
@@ -50,8 +48,8 @@ public class AttackState : NetworkBehaviour
             _isAttack = false;
             _rigidbody.velocity = Vector3.zero;
         }
+
     }
-    [ClientRpc]
     private void TryToDealDamage()
     {
         bool isHit = Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, _raycastDistance);
@@ -60,11 +58,23 @@ public class AttackState : NetworkBehaviour
         if(isHit) Debug.Log($"{hit.collider.gameObject.TryGetComponent(out Health pop)} - есть у него жизни");
         if (isHit && hit.collider.gameObject.TryGetComponent(out Health health) && _isAttack)
         {
-            Debug.Log("Прошла атака по ХИТУ");
-            if(isServer) health.DealDamagege(_attackDamage);
-            else health.CmdDealDamage(_attackDamage);
+            if (isServer) DealDamage (health);
+            CmdDealDamage(health);
             _isAttack = false;
         }
+    }
+    [Server]
+    private void DealDamage(Health health)
+    {
+        // health.GetComponent<NetworkIdentity>().AssignClientAuthority(this.GetComponent<NetworkIdentity>().connectionToClient);
+        Debug.Log("Прошла атака по ХИТУ");
+        health.ApplyDamage(_attackDamage);
+    }
+    [Command]
+    private void CmdDealDamage(Health health)
+    {
+        Debug.Log("Прошла атака по ХИТУ");
+        health.ApplyDamage(_attackDamage);
     }
     public void StartAttack()
     {
@@ -78,17 +88,25 @@ public class AttackState : NetworkBehaviour
     //    Debug.Log(_isAttack);
     //    Debug.Log(collision.gameObject.name);
     //    Debug.Log(collision.gameObject.TryGetComponent(out Health pop));
+    //    TryToDealDamge(collision.gameObject);
+    //}
+    //private void OnCollisionExit(Collision collision)
+    //{
     //    if (collision.gameObject.TryGetComponent(out Health health) && _isAttack)
     //    {
-    //            health.DealDamagege(_attackDamage);
-    //            health.CmdDealDamage(_attackDamage);
+    //        health.GetComponent<NetworkIdentity>().RemoveClientAuthority();
     //    }
-    //    _isAttack = false;
     //}
-    //private void IsAttackingChanged(bool value)
+    //[Command]
+    //private void TryToDealDamge(GameObject collision)
     //{
-    //    if (isClient) CmdChangeIsAttacking(value);
-    //    else ChangeIsAttacking(value);
+    //    if (collision.gameObject.TryGetComponent(out Health health) && _isAttack)
+    //    {
+    //        // health.GetComponent<NetworkIdentity>().AssignClientAuthority(this.GetComponent<NetworkIdentity>().connectionToClient);
+    //        health.DealDamagege(_attackDamage);
+    //        health.CmdDealDamage(_attackDamage);
+    //    }
     //}
+
 }
 
