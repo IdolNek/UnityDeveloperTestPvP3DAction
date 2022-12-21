@@ -789,9 +789,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncDirection: 0
-  syncMode: 1
+  syncMode: 0
   syncInterval: 0.1
   _maxHealth: 100
+  "_isDamaged\u0421ountdownTime": 20
   _currentHeath: 0
 --- !u!114 &5788395929399090780
 MonoBehaviour:

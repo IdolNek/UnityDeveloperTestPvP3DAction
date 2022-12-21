@@ -53,27 +53,22 @@ public class AttackState : NetworkBehaviour
     private void TryToDealDamage()
     {
         bool isHit = Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, _raycastDistance);
-        Debug.Log($"{_isAttack} - атака");
-        Debug.Log($"{ isHit} - изхит");
-        if(isHit) Debug.Log($"{hit.collider.gameObject.TryGetComponent(out Health pop)} - есть у него жизни");
         if (isHit && hit.collider.gameObject.TryGetComponent(out Health health) && _isAttack)
         {
+            Debug.Log("Удар по хиту");
+            _isAttack = false;
             if (isServer) DealDamage (health);
             CmdDealDamage(health);
-            _isAttack = false;
         }
     }
     [Server]
     private void DealDamage(Health health)
     {
-        // health.GetComponent<NetworkIdentity>().AssignClientAuthority(this.GetComponent<NetworkIdentity>().connectionToClient);
-        Debug.Log("Прошла атака по ХИТУ");
         health.ApplyDamage(_attackDamage);
     }
     [Command]
     private void CmdDealDamage(Health health)
     {
-        Debug.Log("Прошла атака по ХИТУ");
         health.ApplyDamage(_attackDamage);
     }
     public void StartAttack()
@@ -81,6 +76,13 @@ public class AttackState : NetworkBehaviour
         _isAttack = true;
         _attackStartPoint = transform.position;
     }
+
+
+
+
+
+
+
     //[ClientCallback]
     //private void OnCollisionEnter(Collision collision)
     //{
