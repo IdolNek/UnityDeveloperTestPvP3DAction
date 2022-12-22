@@ -9,7 +9,7 @@ public class NetworkLobbyManager : NetworkRoomManager
 {
     [SerializeField] private GameObject _roundSystem;
     //[SerializeField] private GameObject _roundEvent;
-    public List<Player> Players = new List<Player>();
+    public List<NetworkGamePlayer> Players = new List<NetworkGamePlayer>();
     public static event Action OnServerStopped;
     public static event Action<NetworkConnection> OnServerReadied;
 
@@ -57,7 +57,7 @@ public class NetworkLobbyManager : NetworkRoomManager
     /// <returns>true unless some code in here decides it needs to abort the replacement</returns>
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
     {
-        Player player = gamePlayer.GetComponent<Player>();
+        NetworkGamePlayer player = gamePlayer.GetComponent<NetworkGamePlayer>();
         player.Index = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
         player.NickName = "Player " + (player.Index +1).ToString();
         Players.Add(player);

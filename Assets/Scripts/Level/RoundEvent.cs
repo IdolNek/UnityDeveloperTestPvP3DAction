@@ -9,7 +9,7 @@ public class RoundEvent : NetworkBehaviour
     [SerializeField] private GameUI _gameUI;
     private static RoundEvent instance;
     [HideInInspector]
-    public Player LocalPlayer;
+    public NetworkGamePlayer LocalPlayer;
     public readonly SyncList<String> PlayerNickNames = new SyncList<string>();
 
     public bool IsGameOver()

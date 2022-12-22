@@ -28,6 +28,7 @@ public class PlayerInput : NetworkBehaviour
     }
     private void GetMoveDirection()
     {
+        if (_camera == null) return;
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
         Vector3 movementInput = Quaternion.Euler(0, _camera.transform.eulerAngles.y, 0) * new Vector3(horizontalInput, 0, verticalInput);

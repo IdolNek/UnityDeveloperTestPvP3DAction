@@ -11,14 +11,6 @@ public class PlayerAction : MonoBehaviour
     [SerializeField] private Health _health;
     private bool _isDead = false;
     private Rigidbody _rigidbody;
-    private void OnEnable()
-    {
-        _health.OnPlayerDayed += IsDead;
-    }
-    private void OnDisable()
-    {
-        _health.OnPlayerDayed -= IsDead;
-    }
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -27,7 +19,6 @@ public class PlayerAction : MonoBehaviour
     {
         if (_isDead) return;
         if (_attackState.IsAttack) return;
-        // Debug.Log(moveDirection);
         if (moveDirection != Vector3.zero)
         {
             Quaternion desireRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
@@ -43,5 +34,4 @@ public class PlayerAction : MonoBehaviour
         _attackState.StartAttack();
         _animatorController.SetTrigger("Attack");
     }
-    private void IsDead() => _isDead = true;
 }
