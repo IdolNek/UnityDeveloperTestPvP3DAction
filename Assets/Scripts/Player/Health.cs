@@ -32,6 +32,17 @@ public class Health : NetworkBehaviour
     {
         _currentHeath = newValue;
         HealthChanging();
+        if (_currentHeath == 0)
+        {
+
+            Debug.Log("Один умер");
+            RoundEvent.GetInstance().RemovePlayerNickName(this.GetComponent<Player>().NickName);
+            Debug.Log($"Проверка все умерли? = { RoundEvent.GetInstance().IsGameOver()}");
+            if (RoundEvent.GetInstance().IsGameOver())
+            {
+                RoundEvent.GetInstance().GameOver();
+            }
+        }
     }
     [Server]
     public void ApplyDamage(float damage)

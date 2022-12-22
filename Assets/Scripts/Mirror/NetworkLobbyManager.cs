@@ -5,12 +5,30 @@ using Mirror;
 using System;
 using UnityEngine.SceneManagement;
 
-[AddComponentMenu("")]
 public class NetworkLobbyManager : NetworkRoomManager
 {
     [SerializeField] private GameObject _roundSystem;
+    //[SerializeField] private GameObject _roundEvent;
+    public List<Player> Players = new List<Player>();
     public static event Action OnServerStopped;
     public static event Action<NetworkConnection> OnServerReadied;
+
+    //public override void OnServerAddPlayer(NetworkConnectionToClient conn)
+    //{
+    //    base.OnServerAddPlayer(conn);
+    //    Player player = conn.identity.GetComponent<Player>();
+    //    Players.Add(player);
+    //}
+
+
+
+
+
+
+
+
+
+
     /// <summary>
     /// This is called on the server when a networked scene finishes loading.
     /// </summary>
@@ -21,8 +39,12 @@ public class NetworkLobbyManager : NetworkRoomManager
         {
             GameObject roundSystemInstance = Instantiate(_roundSystem);
             NetworkServer.Spawn(roundSystemInstance);
-        }
-
+            //GameObject roundEventInstance = Instantiate(_roundEvent);
+            //NetworkServer.Spawn(roundEventInstance);
+            //NetworkServer.
+            //RoundEvent.GetInstance().StartGame();
+            //Debug.Log("Запускаем отчет")ж
+        }       
     }
 
     /// <summary>
@@ -33,12 +55,16 @@ public class NetworkLobbyManager : NetworkRoomManager
     /// <param name="roomPlayer"></param>
     /// <param name="gamePlayer"></param>
     /// <returns>true unless some code in here decides it needs to abort the replacement</returns>
-    //public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
-    //{
-    //    PlayerScore playerScore = gamePlayer.GetComponent<PlayerScore>();
-    //    playerScore.index = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
-    //    return true;
-    //}
+    public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
+    {
+        Player player = gamePlayer.GetComponent<Player>();
+        player.Index = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
+        player.NickName = "Player " + (player.Index +1).ToString();
+        Players.Add(player);
+        RoundEvent.GetInstance().AddPlayerNickName(player.NickName);
+        Debug.Log($"Он рум сервер сцен лоадед фор плеер и создано игроков {Players.Count} ");
+        return true;
+    }
 
     public override void OnRoomStopClient()
     {
@@ -86,8 +112,9 @@ public class NetworkLobbyManager : NetworkRoomManager
     }
     public override void OnServerReady(NetworkConnectionToClient conn)
     {
-
+        Debug.Log("Сервер готов");
         base.OnServerReady(conn);
         OnServerReadied?.Invoke(conn);
+
     }
 }

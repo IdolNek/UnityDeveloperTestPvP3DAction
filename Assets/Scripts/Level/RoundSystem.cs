@@ -1,4 +1,5 @@
 using Mirror;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,11 +7,8 @@ using UnityEngine;
 public class RoundSystem : NetworkBehaviour
 {
     [SerializeField] private Animator _couldDownAnimator;
-    public void CountdownEnded()
-    {
-        _couldDownAnimator.enabled = false;
-    }
-    public override void OnStartServer()
+ 
+     public override void OnStartServer()
     {
         NetworkLobbyManager.OnServerStopped += CleanUpServer;
         NetworkLobbyManager.OnServerReadied += StartCountdown;
@@ -29,10 +27,28 @@ public class RoundSystem : NetworkBehaviour
         _couldDownAnimator.enabled = true;
         RpcStartCountdown();
     }
+    public void CountdownEnded()
+    {
+        _couldDownAnimator.enabled = false;
+    }
     [ClientRpc]
     private void RpcStartCountdown()
     {
         _couldDownAnimator.enabled = true;
     }
+   
 
+
+
+
+
+
+    //public override void OnStartLocalPlayer()
+    //{
+    //    Health[] players = GameObject.FindObjectsOfType<Health>();
+    //    foreach (Health item in players)
+    //    {
+
+    //    }
+    //}
 }

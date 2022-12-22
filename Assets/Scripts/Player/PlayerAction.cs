@@ -33,9 +33,9 @@ public class PlayerAction : MonoBehaviour
             Quaternion desireRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
             transform.rotation = Quaternion.Slerp(transform.rotation, desireRotation, _rotationSpeed * Time.fixedDeltaTime);
             _animatorController.SetBool("Move", true);
+        } else _animatorController.SetBool("Move", false);
             Vector3 moveVector = moveDirection * _moveSpeed * Time.fixedDeltaTime;
             _rigidbody.velocity = new Vector3(moveVector.x, _rigidbody.velocity.y, moveVector.z);
-        } else _animatorController.SetBool("Move", false);
     }
     public void Attack()
     {
