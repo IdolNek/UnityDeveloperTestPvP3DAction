@@ -320,9 +320,7 @@ MonoBehaviour:
   playerPrefab: {fileID: 9143825353232122431, guid: a58deb1aab9cc974ab944c8bf92b757c, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs:
-  - {fileID: 7798141869800021845, guid: 5d5691c8e7d2b9c44b15319c48333d74, type: 3}
-  - {fileID: 4162753446554108748, guid: 989066d23fe694340a6d85d797df4440, type: 3}
+  spawnPrefabs: []
   timeInterpolationGui: 0
   showRoomGUI: 1
   minPlayers: 1
@@ -332,8 +330,6 @@ MonoBehaviour:
   _allPlayersReady: 1
   roomSlots: []
   clientIndex: 0
-  _roundSystem: {fileID: 7798141869800021845, guid: 5d5691c8e7d2b9c44b15319c48333d74, type: 3}
-  _roundEvent: {fileID: 4162753446554108748, guid: 989066d23fe694340a6d85d797df4440, type: 3}
   Players: []
 --- !u!1 &1449975892
 GameObject:

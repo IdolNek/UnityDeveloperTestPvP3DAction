@@ -8,9 +8,11 @@ using UnityEngine.SceneManagement;
 public class RoundEvent : NetworkBehaviour
 {
     [SerializeField] private GameUI _gameUI;
-    private static RoundEvent _instance;
     [SerializeField] private float _waitToRestartRound = 5f;
+    [SerializeField] private Transform _spownPoints;
+    private static RoundEvent _instance;
     public readonly SyncList<String> PlayerNickNames = new SyncList<string>();
+    private List<NetworkGamePlayer> players = new List<NetworkGamePlayer> ();
 
     private void Awake()
     {
@@ -27,6 +29,10 @@ public class RoundEvent : NetworkBehaviour
     private void Start()
     {
         _gameUI.OnStartGame();
+        foreach (var player in NetworkLobbyManager.GetInstance().Players)
+        {
+            players.Add(player);
+        }
     }
     public void AddPlayerNickName(string nickName)
     {

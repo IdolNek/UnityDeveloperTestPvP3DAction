@@ -13,7 +13,7 @@ public class Health : NetworkBehaviour
     [SerializeField] private Animator _animatorController;
     [SerializeField] private Material _material;
     [SyncVar] private float _currentHeath;
-    public event UnityAction<float, float> OnHealthChanged;
+    public event UnityAction<float, float,float> OnHealthChanged;
     private bool isDamaged = false;
 
     private void Start()
@@ -51,12 +51,17 @@ public class Health : NetworkBehaviour
     [ClientRpc]
     private void HealthChanging()
     {
-        OnHealthChanged?.Invoke(_currentHeath, _maxHealth);
+        OnHealthChanged?.Invoke(_currentHeath, _maxHealth, _isDamaged—ountdownTime);
         if (_currentHeath == 0)
         {
             _animatorController.SetBool("Death", true);
         }
         else _animatorController.SetTrigger("GetHit");
 
+    }
+    [ClientRpc]
+    private void MaterialSetColor(Color color)
+    {
+        _material.SetColor("_Color", color);
     }
 }

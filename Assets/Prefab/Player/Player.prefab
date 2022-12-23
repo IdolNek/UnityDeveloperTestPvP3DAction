@@ -164,7 +164,7 @@ GameObject:
   - component: {fileID: 4664173548418188927}
   - component: {fileID: 7717609106769823845}
   m_Layer: 0
-  m_Name: Text (TMP)
+  m_Name: NickNamePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -227,8 +227,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -571,6 +571,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: {fileID: 6846892145310710855}
   _healthBarImage: {fileID: 2743293549567334240}
+  _blinkColor: {r: 0, g: 1, b: 1, a: 1}
 --- !u!114 &7269973389547518614
 MonoBehaviour:
   m_ObjectHideFlags: 0
