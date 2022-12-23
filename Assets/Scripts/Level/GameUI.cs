@@ -7,13 +7,6 @@ public class GameUI : MonoBehaviour
 {
     [SerializeField] private StartGameCountDownUI _countDownUI;
     [SerializeField] private GameOverMenuUI _whoWinUI;
-
-
-    IEnumerator Start()
-    {
-        while (RoundEvent.GetInstance() == null || RoundEvent.GetInstance().LocalPlayer == null)
-            yield return null;
-    }
     public void OnStartGame()
     {
         _countDownUI.StartCountDown();

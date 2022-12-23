@@ -11,6 +11,7 @@ public class Health : NetworkBehaviour
     [SerializeField] private float _maxHealth;
     [SerializeField] private float _isDamaged—ountdownTime;
     [SerializeField] private Animator _animatorController;
+    [SerializeField] private Material _material;
     [SyncVar] private float _currentHeath;
     public event UnityAction<float, float> OnHealthChanged;
     private bool isDamaged = false;

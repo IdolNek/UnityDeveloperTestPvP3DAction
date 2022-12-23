@@ -10,6 +10,5 @@ public class GameOverMenuUI : MonoBehaviour
     {
         gameObject.SetActive(true);
         _namePlayerWinnerTMP.text = name;
-        gameObject.SetActive(true);
     }
 }

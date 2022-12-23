@@ -8,13 +8,11 @@ public class StartGameCountDownUI : MonoBehaviour
 {
     [SerializeField] private TMP_Text _textCountDown;
     private float _secondForWait = 0.5f;
-
     public void StartCountDown()
     {
         this.gameObject.SetActive(true);
         StartCoroutine(StartCountDownCoroutine());
     }
-
     private IEnumerator StartCountDownCoroutine()
     {
         UpdateTaxt("Loading");
