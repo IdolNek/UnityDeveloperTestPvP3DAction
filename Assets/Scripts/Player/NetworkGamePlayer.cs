@@ -10,9 +10,11 @@ public class NetworkGamePlayer : NetworkBehaviour
     public int Index;
     [SyncVar]
     public string NickName;
+    [SyncVar]
+    public int Score;
+
     private void Start()
     {
         _nickName.text = NickName;
     }
-
 }

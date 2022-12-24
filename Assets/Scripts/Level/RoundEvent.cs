@@ -3,16 +3,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class RoundEvent : NetworkBehaviour
 {
     [SerializeField] private GameUI _gameUI;
     [SerializeField] private float _waitToRestartRound = 5f;
-    [SerializeField] private Transform _spownPoints;
+    [SerializeField] private Transform[] _spownPoints;
     private static RoundEvent _instance;
+    public readonly SyncList<NetworkGamePlayer> Players = new SyncList<NetworkGamePlayer> ();
     public readonly SyncList<String> PlayerNickNames = new SyncList<string>();
-    private List<NetworkGamePlayer> players = new List<NetworkGamePlayer> ();
+    public event UnityAction<Transform[]> OnStartGame;
 
     private void Awake()
     {
@@ -22,56 +24,113 @@ public class RoundEvent : NetworkBehaviour
     {
         return _instance;
     }
-    public bool IsGameOver()
-    {
-        return PlayerNickNames.Count == 1;
-    }
     private void Start()
     {
         _gameUI.OnStartGame();
-        foreach (var player in NetworkLobbyManager.GetInstance().Players)
-        {
-            players.Add(player);
-        }
+    }
+    public bool IsGameOver()
+    {
+        return PlayerNickNames.Count == 1;
     }
     public void AddPlayerNickName(string nickName)
     {
         PlayerNickNames.Add(nickName);
     }
+    public void AddPlayerToGamePlayerList(NetworkGamePlayer player)
+    {
+        Players.Add(player);
+    }
+    private void AddAllPlayerNickName()
+    {
+        foreach (var player in Players)
+        {
+            AddPlayerNickName(player.NickName);
+        }
+    }
     public void RemovePlayerNickName(string nickName)
     {
         PlayerNickNames.Remove(nickName);
     }
-
     public void GameOver()
     {
-        CmdGameOver();
+        if (isServer) SetScoreForWiner();
+        else CmdSetScoreForWiner();
+        if (isServer) ShowWiner();
+        else CmdShowWiner();
         StartCoroutine(GameOverCoroutine());
-        CmdDeleteSpawnPrefab();
+    }
+    [Command(requiresAuthority = false)]
+    private void CmdSetScoreForWiner()
+    {
+        SetScoreForWiner();
+    }
+    [Server]
+    private void SetScoreForWiner()
+    {
+        foreach (var player in Players)
+        {
+            if (player.NickName == PlayerNickNames[0]) player.Score += 1;
+        }
+    }
+    [Server]
+    private void SetLineOfPoints()
+    {
+        string score = "";
+        foreach (var player in Players)
+        {
+            score += player.NickName + " Score: " + player.Score + " ";
+        }
+        RpcSetLineOfPoints(score);
+    }
+    [Command(requiresAuthority = false)]
+    private void CmdSetLineOfPoints()
+    {
+        SetLineOfPoints();
     }
     [ClientRpc]
-    private void CmdDeleteSpawnPrefab()
+    private void RpcSetLineOfPoints(string score)
     {
-
-        
+        _gameUI.OnShowScore(score);
     }
 
     private IEnumerator GameOverCoroutine()
     {
         yield return new WaitForSeconds(_waitToRestartRound);
-
+        PlayerNickNames.Clear();
+        AddAllPlayerNickName();
+        if (isServer) StartNewGame();
+        else CmdStartNewGame();
+        if (isServer) SetLineOfPoints();
+        else CmdSetLineOfPoints();
     }
-
-    [Command(requiresAuthority = false)]
-    private void CmdGameOver()
+    [Server]
+    private void StartNewGame()
     {
-        RpcShowWiner();
+        RpcStartNewGame();
+    }
+    [Command(requiresAuthority = false)]
+    private void CmdStartNewGame()
+    {
+        StartNewGame();
     }
     [ClientRpc]
-    private void RpcShowWiner()
-    {
-        _gameUI.OnShowWiner(PlayerNickNames[0]);
+    private void RpcStartNewGame()
+    {       
+        OnStartGame?.Invoke(_spownPoints);
     }
-    
-
+    [Server]
+    private void ShowWiner()
+    {
+        RpcShowWiner(PlayerNickNames[0]);
+    }
+    [Command(requiresAuthority = false)]
+    private void CmdShowWiner()
+    {
+        ShowWiner();
+    }
+    [ClientRpc]
+    private void RpcShowWiner(string nickName)
+    {
+        _gameUI.OnShowWiner(nickName);
+    }
 }

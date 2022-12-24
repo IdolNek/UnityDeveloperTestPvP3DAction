@@ -18,13 +18,12 @@ public class NetworkLobbyManager : NetworkRoomManager
     {
         return _instance;
     }
-    public List<NetworkGamePlayer> Players = new List<NetworkGamePlayer>();
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
     {
         NetworkGamePlayer player = gamePlayer.GetComponent<NetworkGamePlayer>();
         player.Index = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
-        player.NickName = "Player " + (player.Index +1).ToString();
-        Players.Add(player);
+        player.NickName = "Player" + (player.Index +1);
+        RoundEvent.GetInstance().AddPlayerToGamePlayerList(player);
         RoundEvent.GetInstance().AddPlayerNickName(player.NickName);
         return true;
     }
