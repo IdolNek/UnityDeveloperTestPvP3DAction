@@ -1,8 +1,6 @@
 using Mirror;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
@@ -43,7 +41,6 @@ public class Health : NetworkBehaviour
         if (_currentHeath == 0)
         {
             RoundEvent.GetInstance().RemovePlayerNickName(this.GetComponent<NetworkGamePlayer>().NickName);
-            Debug.Log($"Èãðà çàêîí÷åíà - {RoundEvent.GetInstance().IsGameOver()}");
             if (RoundEvent.GetInstance().IsGameOver())
             {
                 //this.GetComponent<NetworkGamePlayer>().Score += 1;
@@ -64,7 +61,6 @@ public class Health : NetworkBehaviour
         yield return new WaitForSeconds(_isDamagedÑountdownTime);
         _isDamaged = false;
     }
-
     [ClientRpc]
     private void HealthChanging()
     {

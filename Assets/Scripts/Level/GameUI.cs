@@ -1,7 +1,3 @@
-using Mirror;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameUI : MonoBehaviour
@@ -14,7 +10,6 @@ public class GameUI : MonoBehaviour
     {
         _countDownUI.StartCountDown();
     }
-
     public void OnShowWiner(string nickNameWiner)
     {
         _whoWinUI.SetNamePlayerWinner(nickNameWiner);

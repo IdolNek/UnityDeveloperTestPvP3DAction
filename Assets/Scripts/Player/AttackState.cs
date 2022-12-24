@@ -1,9 +1,5 @@
 using Mirror;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Rigidbody))]
 public class AttackState : NetworkBehaviour
@@ -25,14 +21,19 @@ public class AttackState : NetworkBehaviour
         if (!_isAttack) return;
         Vector3 moveVector =  transform.forward * _attackForce * Time.fixedDeltaTime;
         _rigidbody.velocity = moveVector;
-        Vector3 currentDistanceAttack = transform.position - _attackStartPoint;
-        if (currentDistanceAttack.magnitude >= _attackDistance)
+        // Vector3 currentDistanceAttack = transform.position - _attackStartPoint;
+        if (Vector3.Distance(_attackStartPoint, transform.position) >= _attackDistance)
         {
             _rigidbody.velocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;
             _isAttack = false;
         }
 
+    }
+    public void StartAttack()
+    {
+        _isAttack = true;
+        _attackStartPoint = transform.position;
     }
     [Server]
     private void DealDamage(Health health)
@@ -43,11 +44,6 @@ public class AttackState : NetworkBehaviour
     private void CmdDealDamage(Health health)
     {
         health.ApplyDamage(_attackDamage);
-    }
-    public void StartAttack()
-    {
-        _isAttack = true;
-        _attackStartPoint = transform.position;
     }
     [ClientCallback]
     private void OnCollisionEnter(Collision collision)

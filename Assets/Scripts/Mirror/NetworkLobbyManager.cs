@@ -1,23 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
-using System;
-using UnityEngine.SceneManagement;
-using Unity.VisualScripting;
 
 public class NetworkLobbyManager : NetworkRoomManager
 {
-    private static NetworkLobbyManager _instance;
-    public override void Start()
-    {
-        base.Start();
-        _instance = this;
-    }
-    public static NetworkLobbyManager GetInstance()
-    {
-        return _instance;
-    }
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
     {
         NetworkGamePlayer player = gamePlayer.GetComponent<NetworkGamePlayer>();

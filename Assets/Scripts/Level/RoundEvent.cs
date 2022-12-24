@@ -1,10 +1,8 @@
 using Mirror;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 
 public class RoundEvent : NetworkBehaviour
 {
@@ -12,10 +10,11 @@ public class RoundEvent : NetworkBehaviour
     [SerializeField] private float _waitToRestartRound = 5f;
     [SerializeField] private Transform[] _spownPoints;
     private static RoundEvent _instance;
-    public readonly SyncList<NetworkGamePlayer> Players = new SyncList<NetworkGamePlayer> ();
-    public readonly SyncList<String> PlayerNickNames = new SyncList<string>();
+    private readonly SyncList<NetworkGamePlayer> Players = new SyncList<NetworkGamePlayer> ();
+    private readonly SyncList<String> PlayerNickNames = new SyncList<string>();
     public event UnityAction<Transform[]> OnStartGame;
 
+    #region instance
     private void Awake()
     {
         _instance = this;
@@ -24,14 +23,15 @@ public class RoundEvent : NetworkBehaviour
     {
         return _instance;
     }
+    #endregion
+
     private void Start()
     {
         _gameUI.OnStartGame();
     }
-    public bool IsGameOver()
-    {
-        return PlayerNickNames.Count == 1;
-    }
+
+
+    #region WorkWithList
     public void AddPlayerNickName(string nickName)
     {
         PlayerNickNames.Add(nickName);
@@ -50,6 +50,13 @@ public class RoundEvent : NetworkBehaviour
     public void RemovePlayerNickName(string nickName)
     {
         PlayerNickNames.Remove(nickName);
+    }
+    #endregion
+
+    #region GameOver
+    public bool IsGameOver()
+    {
+        return PlayerNickNames.Count == 1;
     }
     public void GameOver()
     {
@@ -104,21 +111,6 @@ public class RoundEvent : NetworkBehaviour
         else CmdSetLineOfPoints();
     }
     [Server]
-    private void StartNewGame()
-    {
-        RpcStartNewGame();
-    }
-    [Command(requiresAuthority = false)]
-    private void CmdStartNewGame()
-    {
-        StartNewGame();
-    }
-    [ClientRpc]
-    private void RpcStartNewGame()
-    {       
-        OnStartGame?.Invoke(_spownPoints);
-    }
-    [Server]
     private void ShowWiner()
     {
         RpcShowWiner(PlayerNickNames[0]);
@@ -133,4 +125,25 @@ public class RoundEvent : NetworkBehaviour
     {
         _gameUI.OnShowWiner(nickName);
     }
+    #endregion
+
+    #region StartNewRound
+    [Server]
+    private void StartNewGame()
+    {
+        RpcStartNewGame();
+    }
+    [Command(requiresAuthority = false)]
+    private void CmdStartNewGame()
+    {
+        StartNewGame();
+    }
+    [ClientRpc]
+    private void RpcStartNewGame()
+    {       
+        OnStartGame?.Invoke(_spownPoints);
+        _gameUI.OnStartGame();
+    }
+    #endregion
+
 }

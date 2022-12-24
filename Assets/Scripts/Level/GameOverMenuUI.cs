@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -15,7 +13,6 @@ public class GameOverMenuUI : MonoBehaviour
         StartCoroutine(PlayerWinerCountDown());
 
     }
-
     private IEnumerator PlayerWinerCountDown()
     {
         yield return new WaitForSeconds(_playerWinerCountDownTime);

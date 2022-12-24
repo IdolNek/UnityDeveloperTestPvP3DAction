@@ -785,7 +785,6 @@ MonoBehaviour:
   _maxHealth: 100
   "_isDamaged\u0421ountdownTime": 2
   _animatorController: {fileID: 7842290961695842186}
-  _material: {fileID: 2100000, guid: 7e862f1304d578a4694c6c862f16aa47, type: 2}
 --- !u!114 &5788395929399090780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -801,8 +800,8 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 1
   syncInterval: 0
-  _attackForce: 700
-  _attackDistance: 7
+  _attackForce: 3000
+  _attackDistance: 11
   _attackDamage: 35
 --- !u!136 &330345629074199514
 CapsuleCollider:
@@ -830,7 +829,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a439b17946678d4cb2cb957599aebe0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 1
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   _nickName: {fileID: 7717609106769823845}
