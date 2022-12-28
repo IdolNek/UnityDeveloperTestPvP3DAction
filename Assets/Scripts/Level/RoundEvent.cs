@@ -1,18 +1,21 @@
 using Mirror;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 public class RoundEvent : NetworkBehaviour
 {
     [SerializeField] private GameUI _gameUI;
     [SerializeField] private float _waitToRestartRound = 5f;
-    [SerializeField] private Transform[] _spownPoints;
+    [SerializeField] private List<Transform> _spawnPoints;
+    [SerializeField] private PlayerSpawner _playerSpawner;
     private static RoundEvent _instance;
-    private readonly SyncList<NetworkGamePlayer> Players = new SyncList<NetworkGamePlayer> ();
-    private readonly SyncList<String> PlayerNickNames = new SyncList<string>();
-    public event UnityAction<Transform[]> OnStartGame;
+    public readonly SyncList<NetworkGamePlayer> Players = new SyncList<NetworkGamePlayer> ();
+    public event UnityAction RoundEnded;
+   // public event UnityAction<Transform> RoundStarted;
 
     #region instance
     private void Awake()
@@ -25,125 +28,198 @@ public class RoundEvent : NetworkBehaviour
     }
     #endregion
 
-    private void Start()
-    {
-        _gameUI.OnStartGame();
-    }
-
-
-    #region WorkWithList
-    public void AddPlayerNickName(string nickName)
-    {
-        PlayerNickNames.Add(nickName);
-    }
+    
     public void AddPlayerToGamePlayerList(NetworkGamePlayer player)
     {
         Players.Add(player);
     }
-    private void AddAllPlayerNickName()
+
+    private void Start()
     {
-        foreach (var player in Players)
+        _gameUI.OnStartGame();
+    }
+    [Server]
+    public void OnScoreChanged()
+    {
+        RpcShowScore(SetLineOfPoints());
+        if (IsWinnerFounded(out NetworkGamePlayer winner))
         {
-            AddPlayerNickName(player.NickName);
+            RpcShowWinner(winner.NickName);
+            GameOver();
         }
     }
-    public void RemovePlayerNickName(string nickName)
+    [Server]
+    private void GameOver()
     {
-        PlayerNickNames.Remove(nickName);
-    }
-    #endregion
-
-    #region GameOver
-    public bool IsGameOver()
-    {
-        return PlayerNickNames.Count == 1;
-    }
-    public void GameOver()
-    {
-        if (isServer) SetScoreForWiner();
-        else CmdSetScoreForWiner();
-        if (isServer) ShowWiner();
-        else CmdShowWiner();
         StartCoroutine(GameOverCoroutine());
     }
-    [Command(requiresAuthority = false)]
-    private void CmdSetScoreForWiner()
-    {
-        SetScoreForWiner();
-    }
     [Server]
-    private void SetScoreForWiner()
+    private IEnumerator GameOverCoroutine()
     {
+        yield return new WaitForSeconds(_waitToRestartRound);
         foreach (var player in Players)
         {
-            if (player.NickName == PlayerNickNames[0]) player.Score += 1;
+            _playerSpawner.SpawnPlayer(player);
         }
+        _playerSpawner.AddAllSpawnPointsFromRemovedList();
+        RpcShowStartUI();
+        RpcShowScore(SetLineOfPoints());
     }
+
     [Server]
-    private void SetLineOfPoints()
+    private string SetLineOfPoints()
     {
         string score = "";
         foreach (var player in Players)
         {
-            score += player.NickName + " Score: " + player.Score + " ";
+            score += player.NickName + " Score: " + player.GetComponent<PlayerScore>().Score + " ";
         }
-        RpcSetLineOfPoints(score);
-    }
-    [Command(requiresAuthority = false)]
-    private void CmdSetLineOfPoints()
-    {
-        SetLineOfPoints();
+        return score;
     }
     [ClientRpc]
-    private void RpcSetLineOfPoints(string score)
+    private void RpcShowScore(string score)
     {
         _gameUI.OnShowScore(score);
     }
-
-    private IEnumerator GameOverCoroutine()
-    {
-        yield return new WaitForSeconds(_waitToRestartRound);
-        PlayerNickNames.Clear();
-        AddAllPlayerNickName();
-        if (isServer) StartNewGame();
-        else CmdStartNewGame();
-        if (isServer) SetLineOfPoints();
-        else CmdSetLineOfPoints();
-    }
     [Server]
-    private void ShowWiner()
+    private bool IsWinnerFounded(out NetworkGamePlayer winner)
     {
-        RpcShowWiner(PlayerNickNames[0]);
-    }
-    [Command(requiresAuthority = false)]
-    private void CmdShowWiner()
-    {
-        ShowWiner();
+        winner = Players[0];
+        foreach (var player in Players)
+        {
+            if (player.GetComponent<PlayerScore>().Score >= 3)
+            {
+                winner = player;
+                return true;
+            }
+
+        }
+        return false;
     }
     [ClientRpc]
-    private void RpcShowWiner(string nickName)
+    private void RpcShowWinner(string nickName)
     {
         _gameUI.OnShowWiner(nickName);
-    }
-    #endregion
-
-    #region StartNewRound
-    [Server]
-    private void StartNewGame()
-    {
-        RpcStartNewGame();
-    }
-    [Command(requiresAuthority = false)]
-    private void CmdStartNewGame()
-    {
-        StartNewGame();
+        RoundEnded?.Invoke();
     }
     [ClientRpc]
-    private void RpcStartNewGame()
-    {       
-        OnStartGame?.Invoke(_spownPoints);
+    private void RpcShowStartUI()
+    {
         _gameUI.OnStartGame();
     }
-    #endregion
+
+
+
+
+
+
+
+
+
+    //[Command(requiresAuthority = false)]
+    //private void CmdSetLineOfPoints()
+    //{
+    //    SetLineOfPoints();
+    //}
+    //[Server]
+    //private void ShowWiner()
+    //{
+    //    RpcShowWiner(PlayerNickNames[0]);
+    //}
+    //[Command(requiresAuthority = false)]
+    //private void CmdShowWiner()
+    //{
+    //    ShowWiner();
+    //}
+    //[ClientRpc]
+    //private void RpcShowWiner(string nickName)
+    //{
+    //    _gameUI.OnShowWiner(nickName);
+    //}
+ 
+
+
+
+
+
+    //public void AddPlayerNickName(string nickName)
+    //{
+    //    PlayerNickNames.Add(nickName);
+    //}
+    //private void AddAllPlayerNickName()
+    //{
+    //    foreach (var player in Players)
+    //    {
+    //        AddPlayerNickName(player.NickName);
+    //    }
+    //}
+    //public void RemovePlayerNickName(string nickName)
+    //{
+    //    PlayerNickNames.Remove(nickName);
+    //}
+
+
+
+    //public bool IsGameOver()
+    //{
+    //    return PlayerNickNames.Count == 1;
+    //}
+    //public void GameOver()
+    //{
+    //    //if (isServer) SetScoreForWiner();
+    //    //else CmdSetScoreForWiner();
+    //    //if (isServer) ShowWiner();
+    //    //else CmdShowWiner();
+    //    //StartCoroutine(GameOverCoroutine());
+    //}
+    //[Command(requiresAuthority = false)]
+    //private void CmdSetScoreForWiner()
+    //{
+    //    SetScoreForWiner();
+    //}
+    //[Server]
+    //private void SetScoreForWiner()
+    //{
+    //    foreach (var player in Players)
+    //    {
+    //        if (player.NickName == PlayerNickNames[0]) player.Score += 1;
+    //    }
+    //}
+
+    //private IEnumerator GameOverCoroutine()
+    //{
+    //    yield return new WaitForSeconds(_waitToRestartRound);
+    //    PlayerNickNames.Clear();
+    //    AddAllPlayerNickName();
+    //    if (isServer) StartNewGame();
+    //    else CmdStartNewGame();
+    //    if (isServer) SetLineOfPoints();
+    //    else CmdSetLineOfPoints();
+    //}
+
+
+
+    //[Server]
+    //private void StartNewGame()
+    //{
+    //    RpcStartNewGame();
+    //}
+    //[Command(requiresAuthority = false)]
+    //private void CmdStartNewGame()
+    //{
+    //    StartNewGame();
+    //}
+    //[ClientRpc]
+    //private void RpcStartNewGame()
+    //{       
+    //    OnStartGame?.Invoke(_spownPoints);
+    //    _gameUI.OnStartGame();
+    //}
+
+    //internal void OnScoreChanged()
+    //{
+    //    throw new NotImplementedException();
+    //}
+
 
 }

@@ -9,7 +9,6 @@ public class NetworkLobbyManager : NetworkRoomManager
         player.Index = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
         player.NickName = "Player" + (player.Index +1);
         RoundEvent.GetInstance().AddPlayerToGamePlayerList(player);
-        RoundEvent.GetInstance().AddPlayerNickName(player.NickName);
         return true;
     }
     bool showStartButton;

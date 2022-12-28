@@ -1,32 +1,24 @@
+using Mirror;
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIHealthDisplay : MonoBehaviour
+public class UIInvincibleState : MonoBehaviour
 {
-    [SerializeField] private Health _health;
-    [SerializeField] private Image _healthBarImage;
+    [SerializeField] private TextMeshProUGUI _healthBarImage;
     [SerializeField] private Color _blinkColor;
     [Range(1,5)][SerializeField] private float _blinkSpeed =3f;
     private Color _startColor = Color.red;
     private bool _isDamaged;
     private float _pinPongLenght = 1f;
-    private void OnEnable()
+    public void OnDamaged(float isDamaged—ountdownTime)
     {
-        _health.OnHealthChanged += OnHealthChanged;
-    }
-
-
-    private void OnDisable()
-    {
-        _health.OnHealthChanged -= OnHealthChanged;
-    }
-    private void OnHealthChanged(float currentHealth, float maxHealth, float isDamaged—ountdownTime)
-    {
+        gameObject.SetActive(true);
         _isDamaged = true;
-        _healthBarImage.fillAmount = currentHealth/maxHealth;
         StartCoroutine(DamagedCountdownTime(isDamaged—ountdownTime));
+
     }
     private void Update()
     {
@@ -38,5 +30,6 @@ public class UIHealthDisplay : MonoBehaviour
         yield return new WaitForSeconds(isDamaged—ountdownTime);
         _isDamaged = false;
         _healthBarImage.color = _startColor;
+        gameObject.SetActive(false);
     }
 }

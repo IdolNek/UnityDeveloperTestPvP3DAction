@@ -1,6 +1,7 @@
 using Mirror;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class NetworkGamePlayer : NetworkBehaviour
 {
@@ -8,11 +9,11 @@ public class NetworkGamePlayer : NetworkBehaviour
     public int Index;
     [SyncVar]
     public string NickName;
-    [SyncVar]
-    public int Score;
-
-    private void Start()
+    public override void OnStartClient()
     {
         _nickName.text = NickName;
     }
+ 
+
+
 }

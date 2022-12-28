@@ -8,7 +8,7 @@ public class PlayerAction : MonoBehaviour
     [SerializeField] private float _rotationSpeed;
     [SerializeField] private AttackState _attackState;
     [SerializeField] private Animator _animatorController;
-    [SerializeField] private Health _health;
+    [SerializeField] private InvincibleState _health;
     private Rigidbody _rigidbody;
     private void Start()
     {
@@ -16,7 +16,6 @@ public class PlayerAction : MonoBehaviour
     }
     public void MovePlayer(Vector3 moveDirection)
     {
-        if (_health.IsDead) return;
         if (_attackState.IsAttack) return;
         if (moveDirection != Vector3.zero)
         {
@@ -29,7 +28,6 @@ public class PlayerAction : MonoBehaviour
     }
     public void Attack()
     {
-        if (_health.IsDead) return;
         _attackState.StartAttack();
         _animatorController.SetTrigger("Attack");
     }
