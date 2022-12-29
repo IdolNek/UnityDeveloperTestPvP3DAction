@@ -7,9 +7,12 @@ public class NetworkGamePlayer : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI _nickName;
     [SyncVar] public string NickName;
     public int Index;
-    public override void OnStartLocalPlayer()
+    public override void OnStartClient()
     {
         _nickName.text = NickName;
+    }
+    public override void OnStartLocalPlayer()
+    {
         if (isServer) SpawnPlayer();
         else CmdSpawnPlayer();
     }
