@@ -1,7 +1,6 @@
 using Mirror;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class InvincibleState : NetworkBehaviour
 {
@@ -11,7 +10,6 @@ public class InvincibleState : NetworkBehaviour
     [SyncVar]
     private bool _isDamaged = false;
     public bool IsDamaged => _isDamaged;
-    //public event UnityAction<float> OnDamaged;
     [Server]
     public void ApplyDamage()
     {
@@ -26,17 +24,6 @@ public class InvincibleState : NetworkBehaviour
         yield return new WaitForSeconds(_isDamaged—ountdownTime);
         _isDamaged = false;
     }
-
-    //[Server]
-    //private void SetIsDamaged(bool isDamaged)
-    //{
-    //    _isDamaged = isDamaged;
-    //}
-    //[Command]
-    //private void CmdSetDamaged7(bool isDamaged)
-    //{
-    //    SetIsDamaged(isDamaged);
-    //}
     [ClientRpc]
     private void RpcSetUIInvincibleState(float isDamaged—ountdownTime)
     {

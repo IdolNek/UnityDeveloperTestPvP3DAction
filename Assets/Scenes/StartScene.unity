@@ -315,7 +315,7 @@ MonoBehaviour:
   onlineScene: Assets/Scenes/LobbyScene.unity
   transport: {fileID: 872504559}
   networkAddress: localhost
-  maxConnections: 5
+  maxConnections: 3
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 9143825353232122431, guid: a58deb1aab9cc974ab944c8bf92b757c, type: 3}
   autoCreatePlayer: 1
@@ -323,14 +323,13 @@ MonoBehaviour:
   spawnPrefabs: []
   timeInterpolationGui: 0
   showRoomGUI: 1
-  minPlayers: 1
+  minPlayers: 2
   roomPlayerPrefab: {fileID: 2519177841027172093, guid: aac1d32bf2b56584497f4c5cb4e7acf8, type: 3}
   RoomScene: Assets/Scenes/LobbyScene.unity
   GameplayScene: Assets/Scenes/LevelOne.unity
   _allPlayersReady: 1
   roomSlots: []
   clientIndex: 0
-  Players: []
 --- !u!1 &1449975892
 GameObject:
   m_ObjectHideFlags: 0

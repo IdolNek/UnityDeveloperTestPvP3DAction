@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameOverMenuUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _namePlayerWinnerTMP;
-    private float _playerWinerCountDownTime = 2f;
+    [SerializeField] private float _playerWinerCountDownTime = 4f;
     public void SetNamePlayerWinner(string name)
     {
         gameObject.SetActive(true);

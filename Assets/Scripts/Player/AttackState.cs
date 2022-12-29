@@ -1,5 +1,4 @@
 using Mirror;
-using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -28,7 +27,6 @@ public class AttackState : NetworkBehaviour
             _rigidbody.angularVelocity = Vector3.zero;
             _isAttack = false;
         }
-
     }
     public void StartAttack()
     {
@@ -53,6 +51,11 @@ public class AttackState : NetworkBehaviour
     {
         invicible.ApplyDamage();
     }
+    [Server]
+    private void AddScore()
+    {
+        _score.AddScoreForPlayer();
+    }
     [Command]
     private void CmdDealDamage(InvincibleState invicible)
     {
@@ -62,11 +65,6 @@ public class AttackState : NetworkBehaviour
     private void CmdAddScore()
     {
         AddScore();
-    }
-    [Server]
-    private void AddScore()
-    {
-        _score.AddScoreForPlayer();
     }
     [ClientCallback]
     private void OnCollisionStay(Collision collision)

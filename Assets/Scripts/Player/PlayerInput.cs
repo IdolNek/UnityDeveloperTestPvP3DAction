@@ -6,13 +6,13 @@ public class PlayerInput : NetworkBehaviour
     [SerializeField] private Camera _camera;
     [SerializeField] private AudioListener _audioListener;
     private Vector3 _moveDirection;
-    private bool _cursorVisible = false;
+    private bool _cursorVisible = true;
     public override void OnStartLocalPlayer()
     {
         _playerAction.enabled = true;
         _camera.enabled = true;
         _audioListener.enabled = true;
-        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
     private void Update()
     {
@@ -21,8 +21,7 @@ public class PlayerInput : NetworkBehaviour
         if (Input.GetMouseButtonUp(0)) _playerAction.Attack();
         if (Input.GetKeyUp(KeyCode.Escape))
         {
-            _cursorVisible = !_cursorVisible;
-            Cursor.visible = _cursorVisible;
+            Cursor.lockState = _cursorVisible ? CursorLockMode.None : CursorLockMode.Locked;
         }
     }
     private void FixedUpdate()

@@ -1,5 +1,4 @@
 using Mirror;
-using System.Collections;
 using System.Collections.Generic;
 using Telepathy;
 using UnityEngine;
@@ -36,25 +35,11 @@ public class PlayerSpawner : NetworkBehaviour
             AddSpawnPoint(point);
         }
     }
-
     [Server]
     public void SpawnPlayer(NetworkGamePlayer player)
     {
         Transform point = _syncSpawnPoints[Random.Range(0, _syncSpawnPoints.Count)];
         player.GetComponent<NetworkTransform>().RpcTeleport(point.position);
-        // RpcSpawnPlayer(player,point);
         RemoveSpawnPoint(point);
-        //if (isServer) RemoveSpawnPoint(point);
-        //else CmdRemoveSpawnPoint(point);
     }
-    //[Command(requiresAuthority = false)]
-    //private void CmdRemoveSpawnPoint(Transform point)
-    //{
-    //    RemoveSpawnPoint(point);
-    //}
-    //[ClientRpc]
-    //private void RpcSpawnPlayer(NetworkGamePlayer player, Transform point)
-    //{
-    //}
-
 }

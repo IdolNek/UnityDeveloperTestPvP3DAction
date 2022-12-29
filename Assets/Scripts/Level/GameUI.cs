@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GameUI : MonoBehaviour
+public class GameUI:MonoBehaviour
 {
     [SerializeField] private StartGameCountDownUI _countDownUI;
     [SerializeField] private GameOverMenuUI _whoWinUI;
